@@ -1,0 +1,160 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+
+
+\author{Víctor Daniel Ríos Tapia - 18.568.652-3 \\\\ Damian Andrés Reyes Cordero - 18.950.453-5 }
+\title{Tarea nº3 Lenguajes de Programación}
+\date{ 24 Octubre 2017 }
+
+\begin{document}
+\maketitle
+
+\section{Resumen}
+En el presente informe se explicará el concepto de 'red de Petri', además de su función, y sus usos; posteriormente se procederá a modelar, y programar, un sistema mediante el uso de dicha red.
+
+\section{Objetivo}
+Explicar y entender el concepto de 'red de Petri', tanto a nivel de funcionamiento como de usos. Modelar un equipo de desarrollo de software, que trabaja bajo ciertas condiciones, mediante el uso de una red de Petri. Programar dicho modelamiento en cualquier lenguaje de programación.
+
+
+\section{Introducción}
+Una red de Petri es una representación gráfica (o matemática) que sirve para modelar sistemas que, generalmente, poseen propiedades concurrentes, no deterministas, comunicacionales, o de sincronización. Dicha representación gráfica se hace utilizando 4 símbolos:
+\begin{itemize}
+\item Plaza (círculo): Lugar / espacio / estado del sistema.
+\item Transición (rectángulos vertical): Evento que permite relacionar plazas, causando cambios en el sistema.
+\item Arco (Flecha): Une plazas y transiciones para poder armar el modelo de red, y poder expresar el sentido del flujo del sistema. Máximo puede haber un arco uniendo una transición con una plaza.
+\item Token (Punto): Marca que se ubica dentro de las plazas, y que pueden representar distintas cosas según el sistema que se esté modelando.
+\end{itemize}
+Como se mencionó anteriormente, una red de Petri se utiliza para modelar un sistema; y dicha red debe crearse en base al problema a resolver.
+\\\\
+Una red de petri debe estar diseñada para tener diversos estados (plazas) dependiendo de las distintas acciones que requiera el sistema. Para pasar de una plaza a otra siempre se hará a través de una transición (condición / evento); por lo tanto, no pueden existir dos plazas unidas directamente.
+\\\\
+La simulación de los cambios de estados se realiza mediante el movimiento del token. El token puede pasar de una plaza A a una plaza B, sí y solo sí, se cumple el evento que indica la transición que une dichas plazas.
+\\\\
+Teniendo todo esto en cuenta, a continuación se procederá a diseñar una red de petri para un sistema que simula un equipo de desarrollo de software cuya forma de trabajar varía dependiendo de ciertas condiciones / restricciones. Dicho sistema será programado utilizando el lenguaje de programación Java.
+\section{Desarrollo}
+
+El problema planteado nos pide desarrollar una red de Petri que represente el funcionamiento de un equipo de desarrollo de software, el cual está constituido por un analista (A), un diseñador (D), dos programadores (P1 y P2), y un tester (T). Dicho equipo de desarrollo necesita que se cumplan las siguientes restricciones para poder avanzar con sus proyectos:
+\begin{itemize}
+\item A y D pueden trabajar de forma independiente.
+\item P1 y P2 solo pueden trabajar una vez terminen A y D.
+\item T solo puede trabajar una vez que terminen P1 y P2.
+\item T siempre encuentra nuevos problemas, e itera nuevamente hacia A y D.
+\end{itemize}
+
+Si analizamos el problema, y describimos como una cadena de acciones, podemos inferir lo siguiente:
+
+\begin{itemize}
+\item Tanto A como D pueden pueden empezar a trabajar en cualquier momento, ya que son independientes.
+\item P1 y P2 solo pueden trabajar una vez terminen A y D, por lo tanto, si A terminase primero que D, hay que esperar a que D termine y posteriormente llamar a trabajar a P1 Y P2. En el caso de que D termine primero que A, se hace lo mismo pero al revés.
+\item Como no se menciona nada acerca de las condiciones de trabajo de P1 y P2, y dado que ambos se desempeñan en lo mismo, diremos que estos comienzan a trabajar, y que terminan de hacerlo, al mismo tiempo.
+\item T puede empezar a trabajar una vez que P1 y P2 terminen.
+\item Cuando T termine su trabajo, derivará el proyecto nuevamente a A y D; volviéndose a repetir todo el proceso.
+\end{itemize}
+
+Realizando un pequeño diagrama de flujo, para poder ver así el funcionamiento del proceso de manera más simplificada y posteriormente pasar dicho diagrama a una red de Petri, obtendremos algo como lo que se muestra en las siguientes dos imágenes:
+\\\\
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=10cm]{imagenes/Diagrama de flujo.png}
+\end{figure}
+\\\\
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=12cm]{imagenes/Red Petri.png}
+\end{figure}
+\\\\
+\\\\
+\\\\
+\\\\
+\\\\
+\\\\
+Revisando el proceso, el primer paso es poner a trabajar a A y D.
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=12cm]{imagenes/poceso01.png}
+\end{figure}
+\\\\
+En esta sección pueden darse 2 casos. El primer caso es que A termine antes que D, lo que significa que, dadas las condiciones del problema, para que P1 y P2 comiencen a trabajar, estos deberán esperar, junto a A, a que D termine con su trabajo. El segundo caso es lo contrario, si D termina antes que A, para que P1 y P2 comiencen a trabajar, deberán esperar junto a D a que A termine de trabajar. Ambos casos se ven ilustrados en las dos imágenes siguientes:
+\\\\
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=12cm]{imagenes/caso1.png}
+\end{figure}
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=12cm]{imagenes/caso2.png}
+\end{figure}
+\\\\
+\\\\
+\\\\
+\\\\
+\\\\
+\\\\
+Una vez que A y B terminan con su trabajo, es el momento de que P1 y P2 comiencen con el suyo.
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=12cm]{imagenes/poceso02.png}
+\end{figure}
+\\\\
+Como se dijo en un comienzo, supondremos que P1 y P2 trabajan al mismo tiempo y que, por ende, también terminarán de trabajar al mismo tiempo; lo que implica que T tendrá que esperar dicho momento para comenzar a trabajar.
+\\\\
+Por otro lado, si nos ponemos en el caso de que nuestro supuesto es errado, y de que P1 y P2 no necesariamente trabajan al mismo tiempo, lo único que pasaría sería que existen 2 probabilidades, la primera es que P1 termine antes que P2, y la segunda es que P2 termina antes que P1; en cualquier caso, lo único que hay que hacer es esperar, tal como se mencionó en el caso de A y D.
+\\\\
+\\\\
+\\\\
+\\\\
+\\\\
+Finalmente, diremos que T comienza a trabajar cuando P1 y P2 terminan con su trabajo, tal como se muestra en la siguiente imagen:
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=12cm]{imagenes/poceso03.png}
+\end{figure}
+\\\\
+Como T siempre descubre problemas, desde T se vuelve a iterar, llevando el proyecto nuevamente a manos de A y D, y repitiendo todos los pasos anteriormente nombrados.
+\\\\
+A continuación se mostrará el código realizado para el modelo propuesto; dicho código está programado en Python, y será presentado en 2 partes, para una mayor claridad visual.
+\\\\
+Sección uno:
+\begin{figure}[hbtp]
+\centering
+\includegraphics[scale=1]{imagenes/codigo01.png}
+\end{figure}
+\\\\
+\begin{figure}[hbtp]
+\centering
+\includegraphics[scale=1]{imagenes/codigo02.png}
+\end{figure}
+\\\\
+De forma simple y abreviada, diremos que en esta sección se presentan los distintos hilos a utilizar: Analista, Diseñador, Programador, y Tester. Cada uno de dichos hilos posee una 'frase' que nos indica que ha comenzado a ejecutarse, un valor que representa la cantidad de tiempo que durará dicha ejecución, y otra frase que representa cuando el hilo se ha terminado de ejecutar.
+\\\\
+Sección dos:
+\begin{figure}[hbtp]
+\centering
+\includegraphics[scale=1]{imagenes/codigo03.png}
+\end{figure}
+\\\\
+\\\\
+En esta sección se comienza por crear los distintos hilos. A cada hilo se le otorga una letra como identificador (a, d, p1, p2, t), un nombre para el hilo (analista, diseno, programador1, programador2, tester), y el 'target' que indica al hilo cual 'función base', de la sección uno, debe utilizar para ejecutarse.
+\\\\
+Cuando se llama a los distintos identificadores (letras) y se les aplica la función 'start', se procede a ejecutar el hilo correspondiente. Cuando se aplica la función 'join', de forma muy simplificada, podemos decir que se indica al sistema debe 'esperar' a que los hilos continuos terminen antes de seguir con el resto de la ejecución del programa.
+\\\\
+Todo esto se ejecuta dentro de un while debido a las indefinidas iteraciones que debe realizar el equipo de desarrollo.
+\section{Conclusión}
+Como se mencionó anteriormente, una red de Petri es ideal para poder modelar sistemas, especialmente para aquellos que poseen propiedades recursivas y / o concurrente; dada la facilidad que éste modelo nos brinda para el entendimiento del sistema.
+\\\\
+Por otro lado, diseñar una red de Petri no es tan sencillo como suena. Es necesario analizar bien el sistema que se ha de modelar, y adaptarse correctamente al uso de los 4 símbolos que nos permite utilizar. Desde un punto de vista global es necesario entender correctamente el funcionamiento del sistema y los distintos estados que éste pueda tomar, para poder acomodar de forma correcta las plazas, transiciones, y arcos que sean necesarios, y de esta manera poder definir bien los posibles caminos que podrá recorrer el token al momento de la 'simulación'.
+\\\\
+Si todo lo anteriormente nombrado se realiza de forma detallada, definiendo correctamente las plazas, transiciones, arcos, y tokens; es posible usar las redes de Petri para modelar, de forma visualmente sencilla y legible, diversos tipos de sistemas, inclusive aquellos complejos que utilizan concurrencia y recursividad.
+\section{Bibliografía}
+\begin{itemize}
+\item Documentación sobre Python: https: //docs.python.org/2/library/threading.html.
+\item Uso de las redes de Petri: https://www.uaeh.edu.mx/scige/boletin/icbi/n1/e4.html.
+\end{itemize}
+\end{document}
